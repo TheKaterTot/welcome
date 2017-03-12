@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Cupcakes</title>
+    <script>
+      function myWebsocketStart() {
+
+        function appendText(text) {
+          var textArea = document.getElementById("textarea1")
+          textArea.value = textArea.value + "\n" + text
+        }
+
+        var ws = new WebSocket("ws://localhost:3000/websocket")
+        
+        var form = document.getElementById("chatbox")
+        form.onsubmit = function(event) {
+          event.preventDefault()
+          var message = document.getElementById("message")
+          ws.send(message.value)
+          message.value = ""
+        }
+        ws.onmessage = function(event) {
+          appendText(event.data)
+        }
+
+        ws.onopen = function() {
+          appendText("Connection open.")
+        }
+
+        ws.onclose = function() {
+          appendText("Connection closed.")
+        }
+      }
+    </script>
+  </head>
+  <body onload="javascript:myWebsocketStart()">
+    <h1>Welcome</h1>
+    <p>Let's talk about cupcakes.</p>
+    <img src="/assets/cupcake2.jpeg" alt="cupcake" height="200" width="167"/>
+    <div style="display: inline-block;">
+      <textarea id="textarea1" style="width: 400px; height: 200px;"></textarea>
+      <form action="#" id="chatbox">
+        <input type="text" name="chat" id="message" style="width: 350px;" />
+        <input type="submit" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>
+
+
+
